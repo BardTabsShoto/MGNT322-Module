@@ -93,6 +93,7 @@
     <a href="#activity">Activity</a>
     <a href="#quiz">Learning Check</a>
     <a href="#feedback">Feedback</a>
+    <a href="#references">Sources</a>
   </div>
 </nav>
 
@@ -184,7 +185,7 @@
 <!-- 6 QUIZ -->
 <section id="quiz" class="quiz">
   <h2><span class="num">6</span>Learning Check</h2>
-  <p>Five quick questions. Pick one answer each, then submit.</p>
+  <p>Apply what you learned. Each question gives a workplace situation — choose the most appropriate evaluation response, then submit.</p>
   <div id="quiz-questions"></div>
   <button class="btn" onclick="gradeQuiz()">Submit answers</button>
   <div id="quizResult"></div>
@@ -195,6 +196,19 @@
   <h2><span class="num">7</span>Your Feedback</h2>
   <p>Thanks for completing the module! Please take 2 minutes to fill in the short feedback form — it helps me evaluate how effective this module was (yes, using Kirkpatrick Levels 1 &amp; 2!).</p>
   <a class="btn" id="formLink" href="https://docs.google.com/forms/d/e/1FAIpQLSev3vGy2KOgOpJbeJZGIXBedhp1Vg0FStm5PSJfkue1roRGtA/viewform" target="_blank" rel="noopener">Open the feedback form ↗</a>
+</section>
+
+<!-- 8 REFERENCES -->
+<section id="references">
+  <h2><span class="num">8</span>Sources &amp; Further Reading</h2>
+  <p>This module is grounded in the following sources (Harvard style):</p>
+  <ul class="clean">
+    <li>Beer, M., Finnström, M. and Schrader, D. (2016) ‘Why leadership training fails — and what to do about it’, <em>Harvard Business Review</em>, 94(10). Available at: <a href="https://hbr.org/2016/10/why-leadership-training-fails-and-what-to-do-about-it" target="_blank" rel="noopener">hbr.org</a> (Accessed: 11 June 2026).</li>
+    <li>CIPD (2024) <em>Learning evaluation, impact and transfer</em>. Factsheet. London: Chartered Institute of Personnel and Development. Available at: <a href="https://www.cipd.org/en/knowledge/factsheets/evaluating-learning-factsheet/" target="_blank" rel="noopener">cipd.org</a> (Accessed: 11 June 2026).</li>
+    <li>FitzGerald, M. and Lis Dean, K. (2024) ‘Leveraging the Kirkpatrick four-level model to evaluate evaluation capacity building work’, <em>New Directions for Evaluation</em>. Available at: <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/ev.20619" target="_blank" rel="noopener">Wiley Online Library</a> (Accessed: 11 June 2026).</li>
+    <li>Evaluating Training Effectiveness: the Kirkpatrick Model (2026) [Instructional video]. YouTube. Available at: <a href="https://www.youtube.com/watch?v=sLbd-lCfSNU" target="_blank" rel="noopener">youtube.com</a> (Accessed: 11 June 2026).</li>
+  </ul>
+  <p style="margin-top:10px"><small class="lead">Foundational model: Kirkpatrick, D.L. and Kirkpatrick, J.D. (2006) <em>Evaluating Training Programs: The Four Levels</em>. 3rd edn. San Francisco: Berrett-Koehler. ROI extension: Phillips, J.J. (2003) <em>Return on Investment in Training and Performance Improvement Programs</em>. 2nd edn. Routledge.</small></p>
 </section>
 
 <footer>
@@ -238,16 +252,16 @@ function checkActivity(){
 
 /* ---------- Quiz ---------- */
 const quiz = [
-  {q:"1. Evaluation done after training, to judge its overall effectiveness, is called…",
-   opts:["Formative","Summative","Reactive","Informal"], a:1},
-  {q:"2. The main purpose of formative evaluation is to…",
-   opts:["Prove ROI","Improve the training before/while it runs","Replace summative evaluation","Rate the trainer"], a:1},
-  {q:"3. Which is the correct order of Kirkpatrick's four levels?",
-   opts:["Learning → Reaction → Results → Behaviour","Reaction → Learning → Behaviour → Results","Results → Behaviour → Learning → Reaction","Reaction → Behaviour → Learning → Results"], a:1},
-  {q:"4. A pre-test / post-test comparison primarily measures which level?",
-   opts:["Level 1 Reaction","Level 2 Learning","Level 3 Behaviour","Level 4 Results"], a:1},
-  {q:"5. Phillips' fifth level adds which measure?",
-   opts:["Reaction","Engagement","Return on Investment (ROI)","Attendance"], a:2}
+  {q:"1. A manager asks whether last month's customer-service training actually changed how staff handle complaints on the floor. Which level should you focus on?",
+   opts:["Level 1 — Reaction (a satisfaction survey)","Level 2 — Learning (a knowledge quiz)","Level 3 — Behaviour (follow-up observation on the job)","Level 4 — Results (annual revenue)"], a:2},
+  {q:"2. After a 1-hour compliance module, you want quick evidence that employees understood the key rules before they leave. The best method is…",
+   opts:["A smile-sheet asking if they enjoyed it","A short pre/post quiz on the rules","A manager observation six weeks later","The quarterly compliance-breach count"], a:1},
+  {q:"3. Finance wants proof the training was worth its cost. Which evaluation gives them what they need?",
+   opts:["Average reaction rating out of five","A knowledge-check quiz score","Business KPIs and ROI comparing benefits to cost","The number of people who attended"], a:2},
+  {q:"4. Learners rated your workshop 4.8/5, but six weeks later nothing has changed on the job. What does this most likely show?",
+   opts:["The training was effective at every level","A positive reaction (L1) did not translate into changed behaviour (L3)","ROI was high","Learning (L2) was definitely strong"], a:1},
+  {q:"5. You only have time and access to measure one level for a short online module taken by peers. Which is the most realistic to capture now?",
+   opts:["Level 4 — Results (business KPIs)","Level 3 — Behaviour (on-the-job change)","Levels 1–2 — Reaction and Learning (a feedback form + quiz)","Level 5 — ROI in dollars"], a:2}
 ];
 const qWrap=document.getElementById('quiz-questions');
 quiz.forEach((item,i)=>{
