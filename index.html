@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluating Learning & Training Effectiveness — Online Training Module</title>
+<style>
+  :root{
+    --navy:#1f3864; --blue:#2e75b6; --light:#eaf1fb; --line:#d7e0ef;
+    --ink:#1d2433; --grey:#5b6472; --ok:#1d8a4e; --bad:#c0392b; --bg:#f6f8fc;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+  a{color:var(--blue)}
+  header.hero{background:linear-gradient(135deg,var(--navy),var(--blue));color:#fff;padding:48px 20px 40px}
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px}
+  .tag{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);
+       padding:4px 12px;border-radius:20px;font-size:13px;letter-spacing:.3px;margin-bottom:14px}
+  header.hero h1{margin:.1em 0;font-size:32px;line-height:1.25}
+  header.hero p{margin:.3em 0 0;opacity:.92;font-size:17px}
+  nav{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);
+      box-shadow:0 1px 6px rgba(0,0,0,.04)}
+  nav .wrap{display:flex;gap:6px;flex-wrap:wrap;padding:10px 20px}
+  nav a{color:var(--navy);text-decoration:none;font-weight:600;font-size:14px;padding:7px 12px;border-radius:8px}
+  nav a:hover{background:var(--light)}
+  section{background:#fff;margin:22px auto;max-width:880px;border:1px solid var(--line);border-radius:14px;
+          padding:26px 30px;box-shadow:0 2px 10px rgba(20,40,80,.04)}
+  .num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;
+       background:var(--navy);color:#fff;font-weight:700;font-size:15px;margin-right:10px}
+  h2{color:var(--navy);font-size:24px;display:flex;align-items:center;margin:0 0 12px}
+  h3{color:var(--blue);font-size:18px;margin:22px 0 6px}
+  .lead{font-size:17px;color:var(--grey)}
+  ul.clean{padding-left:20px} ul.clean li{margin:6px 0}
+  .outcomes{list-style:none;padding:0;counter-reset:o}
+  .outcomes li{position:relative;padding:12px 14px 12px 50px;background:var(--light);border-radius:10px;margin:8px 0}
+  .outcomes li::before{counter-increment:o;content:counter(o);position:absolute;left:14px;top:12px;
+       width:24px;height:24px;background:var(--blue);color:#fff;border-radius:50%;display:flex;
+       align-items:center;justify-content:center;font-weight:700;font-size:13px}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:15px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:var(--navy);color:#fff;font-weight:600}
+  tbody tr:nth-child(even){background:#f9fbfe}
+  .video-box{position:relative;background:#0e1525;border-radius:12px;aspect-ratio:16/9;display:flex;
+       flex-direction:column;align-items:center;justify-content:center;color:#cdd6e6;text-align:center;padding:20px}
+  .video-box .play{width:64px;height:64px;border-radius:50%;background:var(--blue);display:flex;align-items:center;
+       justify-content:center;margin-bottom:12px}
+  .video-box .play::after{content:"";border-left:20px solid #fff;border-top:12px solid transparent;
+       border-bottom:12px solid transparent;margin-left:5px}
+  .video-box small{opacity:.7;margin-top:6px}
+  .video-wrap{position:relative;aspect-ratio:16/9;border-radius:12px;overflow:hidden;box-shadow:0 4px 16px rgba(20,40,80,.18)}
+  .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .callout{background:var(--light);border-left:4px solid var(--blue);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+  .formula{text-align:center;font-size:20px;font-weight:700;color:var(--navy);background:var(--light);
+       padding:16px;border-radius:10px;margin:14px 0}
+  /* activity */
+  .act-row{display:flex;align-items:center;gap:12px;margin:10px 0;flex-wrap:wrap}
+  .act-row .q{flex:1;min-width:240px}
+  select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:15px;background:#fff}
+  .mark{font-weight:700;min-width:22px}
+  /* quiz */
+  .quiz .q{margin:16px 0;padding:14px 16px;border:1px solid var(--line);border-radius:10px}
+  .quiz .q p{font-weight:600;margin:0 0 8px}
+  .quiz label{display:block;padding:7px 10px;border-radius:8px;cursor:pointer;margin:3px 0}
+  .quiz label:hover{background:var(--light)}
+  .quiz input{margin-right:8px}
+  .btn{display:inline-block;background:var(--blue);color:#fff;border:none;padding:12px 22px;border-radius:10px;
+       font-size:16px;font-weight:600;cursor:pointer;text-decoration:none;margin-top:8px}
+  .btn:hover{background:var(--navy)}
+  .btn.secondary{background:#fff;color:var(--navy);border:2px solid var(--blue)}
+  #quizResult,#actResult{font-weight:700;font-size:18px;margin-top:14px}
+  .correct{color:var(--ok)} .wrong{color:var(--bad)}
+  footer{max-width:880px;margin:30px auto 50px;text-align:center;color:var(--grey);font-size:14px;padding:0 20px}
+  .pill{display:inline-block;background:var(--light);color:var(--navy);padding:3px 10px;border-radius:14px;
+       font-size:13px;font-weight:600;margin:2px 4px 2px 0}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">MGNT322 · Topic 6 · Online Training Module</span>
+    <h1>Evaluating Learning &amp; Training Effectiveness</h1>
+    <p>A short, practical module on how to measure whether training actually worked.</p>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#start">Start Here</a>
+    <a href="#why">Why Evaluate</a>
+    <a href="#model">Kirkpatrick</a>
+    <a href="#method">Choose a Method</a>
+    <a href="#activity">Activity</a>
+    <a href="#quiz">Learning Check</a>
+    <a href="#feedback">Feedback</a>
+  </div>
+</nav>
+
+<!-- 1 START -->
+<section id="start">
+  <h2><span class="num">1</span>Start Here</h2>
+  <p class="lead">Welcome! This 8–10 minute module is for <strong>new L&amp;D / HR staff and line managers</strong> who run training but aren't yet sure how to prove it worked.</p>
+  <h3>By the end you will be able to:</h3>
+  <ol class="outcomes">
+    <li>Explain why we evaluate training, and tell formative from summative evaluation.</li>
+    <li>Describe the four levels of the Kirkpatrick model and what each one measures.</li>
+    <li>Choose an appropriate evaluation method and tool for a given level.</li>
+  </ol>
+  <p><strong>How to move through:</strong> read each section top to bottom, watch the short video, try the activity, take the 5-question check, then leave feedback at the end. <span class="pill">~9 min</span></p>
+</section>
+
+<!-- 2 WHY -->
+<section id="why">
+  <h2><span class="num">2</span>Why Evaluate Training?</h2>
+  <p>Training costs time and money, so organisations need to know it works. Evaluation answers one question: <strong>did this training make the difference we intended?</strong> Without it, L&amp;D is guessing — repeating what people enjoyed rather than what changed performance. Industry estimates put the average cost at roughly <strong>$165 per learning hour</strong>, so weak evaluation is expensive.</p>
+  <h3>Two kinds of evaluation</h3>
+  <table>
+    <thead><tr><th>Type</th><th>When</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Formative</strong></td><td>While you design &amp; pilot</td><td>Improve the training before/while it runs (fix confusing parts).</td></tr>
+      <tr><td><strong>Summative</strong></td><td>After delivery</td><td>Judge the overall effectiveness and value once it's finished.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout">Good practice uses <strong>both</strong>: formative to build it right, summative to prove it worked.</div>
+</section>
+
+<!-- 3 MODEL -->
+<section id="model">
+  <h2><span class="num">3</span>The Kirkpatrick Model</h2>
+  <p>Watch this 90-second explainer, then review the table below.</p>
+  <div class="video-wrap">
+    <iframe src="https://www.youtube.com/embed/sLbd-lCfSNU"
+            title="Evaluating Training Effectiveness — the Kirkpatrick model"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+  </div>
+  <p style="margin-top:16px">Kirkpatrick's model (1959, updated as the <em>New World Kirkpatrick Model</em>) is the most widely used framework for evaluating training. It works on four rising levels:</p>
+  <table>
+    <thead><tr><th>Level</th><th>Name</th><th>Question it answers</th><th>Typical evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>Reaction</strong></td><td>Did learners find it engaging, relevant, useful?</td><td>Feedback survey, rating, post-session poll</td></tr>
+      <tr><td>2</td><td><strong>Learning</strong></td><td>Did they gain knowledge, skills, confidence?</td><td>Pre/post tests, quizzes, demonstrations</td></tr>
+      <tr><td>3</td><td><strong>Behaviour</strong></td><td>Are they applying it on the job?</td><td>Manager observation, follow-up survey weeks later</td></tr>
+      <tr><td>4</td><td><strong>Results</strong></td><td>Did it improve organisational outcomes?</td><td>Business KPIs: quality, productivity, retention, cost</td></tr>
+    </tbody>
+  </table>
+  <ul class="clean">
+    <li>The levels build on each other — a good <strong>reaction</strong> doesn't guarantee <strong>learning</strong>, and learning doesn't guarantee changed <strong>behaviour</strong>.</li>
+    <li>Most organisations only measure Level 1 because it's cheapest. The real value sits at Levels 3–4.</li>
+  </ul>
+  <h3>Worked example</h3>
+  <p>A bank trains tellers on a new fraud-check procedure. <strong>L1:</strong> they rate it 4.5/5. <strong>L2:</strong> a post-quiz shows 90% spot the red flags (up from 55%). <strong>L3:</strong> four weeks later managers see tellers running the checks. <strong>L4:</strong> fraud losses fall 20% that quarter. Only at L4 can the bank say the training paid off.</p>
+  <h3>Going further: ROI (Phillips' Level 5)</h3>
+  <p>Jack Phillips added a fifth level that turns Level-4 results into money and compares them to cost:</p>
+  <div class="formula">ROI (%) = (Net program benefits ÷ Program costs) × 100</div>
+  <p>If the training cost $10,000 and saved $30,000, net benefit = $20,000 → ROI = 200%. Powerful, but harder to isolate from other factors.</p>
+</section>
+
+<!-- 4 METHOD -->
+<section id="method">
+  <h2><span class="num">4</span>Choosing Your Evaluation Method</h2>
+  <p>The skill is matching the method to the level — and to what's realistic to measure.</p>
+  <table>
+    <thead><tr><th>Level</th><th>Best methods / tools</th><th>Watch out for</th></tr></thead>
+    <tbody>
+      <tr><td>1 Reaction</td><td>Short online survey, rating scale, exit poll</td><td>Happy ≠ effective; keep it short</td></tr>
+      <tr><td>2 Learning</td><td>Pre/post test, quiz, skill demo</td><td>Test the outcome, not trivia</td></tr>
+      <tr><td>3 Behaviour</td><td>Follow-up survey (4–8 wks), manager check</td><td>Needs time &amp; manager support</td></tr>
+      <tr><td>4 Results</td><td>Business KPIs, before/after metrics, control group</td><td>Hard to isolate training's effect</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><strong>Rule of thumb:</strong> pick the highest level you can realistically measure with the time and access you have — and always state your assumptions.</div>
+</section>
+
+<!-- 5 ACTIVITY -->
+<section id="activity">
+  <h2><span class="num">5</span>Activity — Match the Method to the Level</h2>
+  <p>For each evaluation action, choose the Kirkpatrick level it belongs to, then check your answers.</p>
+  <div id="activity-rows"></div>
+  <button class="btn" onclick="checkActivity()">Check my answers</button>
+  <div id="actResult"></div>
+</section>
+
+<!-- 6 QUIZ -->
+<section id="quiz" class="quiz">
+  <h2><span class="num">6</span>Learning Check</h2>
+  <p>Five quick questions. Pick one answer each, then submit.</p>
+  <div id="quiz-questions"></div>
+  <button class="btn" onclick="gradeQuiz()">Submit answers</button>
+  <div id="quizResult"></div>
+</section>
+
+<!-- 7 FEEDBACK -->
+<section id="feedback">
+  <h2><span class="num">7</span>Your Feedback</h2>
+  <p>Thanks for completing the module! Please take 2 minutes to fill in the short feedback form — it helps me evaluate how effective this module was (yes, using Kirkpatrick Levels 1 &amp; 2!).</p>
+  <a class="btn" id="formLink" href="https://docs.google.com/forms/d/e/1FAIpQLSev3vGy2KOgOpJbeJZGIXBedhp1Vg0FStm5PSJfkue1roRGtA/viewform" target="_blank" rel="noopener">Open the feedback form ↗</a>
+</section>
+
+<footer>
+  MGNT322 · Learning and Development in Organisations · Assessment 2 · Topic 6 — Evaluating Learning &amp; Training Effectiveness
+</footer>
+
+<script>
+/* ---------- Activity ---------- */
+const actItems = [
+  {q:"A post-course survey asking how relevant and engaging the session was", a:1},
+  {q:"A 10-question quiz comparing scores before and after the training", a:2},
+  {q:"A manager observing whether staff use the new procedure six weeks later", a:3},
+  {q:"Comparing customer-complaint numbers this quarter vs last quarter", a:4},
+  {q:"A learner rating the trainer and the platform out of five", a:1}
+];
+const actWrap = document.getElementById('activity-rows');
+actItems.forEach((it,i)=>{
+  const row=document.createElement('div'); row.className='act-row';
+  row.innerHTML=`<div class="q">${it.q}</div>
+    <select id="act${i}">
+      <option value="0">— level —</option>
+      <option value="1">Level 1 · Reaction</option>
+      <option value="2">Level 2 · Learning</option>
+      <option value="3">Level 3 · Behaviour</option>
+      <option value="4">Level 4 · Results</option>
+    </select><span class="mark" id="actm${i}"></span>`;
+  actWrap.appendChild(row);
+});
+function checkActivity(){
+  let score=0;
+  actItems.forEach((it,i)=>{
+    const val=+document.getElementById('act'+i).value;
+    const m=document.getElementById('actm'+i);
+    if(val===it.a){m.textContent='✓';m.className='mark correct';score++;}
+    else{m.textContent='✗';m.className='mark wrong';}
+  });
+  const r=document.getElementById('actResult');
+  r.textContent=`You matched ${score} of ${actItems.length} correctly.`;
+  r.className = score===actItems.length ? 'correct' : '';
+}
+
+/* ---------- Quiz ---------- */
+const quiz = [
+  {q:"1. Evaluation done after training, to judge its overall effectiveness, is called…",
+   opts:["Formative","Summative","Reactive","Informal"], a:1},
+  {q:"2. The main purpose of formative evaluation is to…",
+   opts:["Prove ROI","Improve the training before/while it runs","Replace summative evaluation","Rate the trainer"], a:1},
+  {q:"3. Which is the correct order of Kirkpatrick's four levels?",
+   opts:["Learning → Reaction → Results → Behaviour","Reaction → Learning → Behaviour → Results","Results → Behaviour → Learning → Reaction","Reaction → Behaviour → Learning → Results"], a:1},
+  {q:"4. A pre-test / post-test comparison primarily measures which level?",
+   opts:["Level 1 Reaction","Level 2 Learning","Level 3 Behaviour","Level 4 Results"], a:1},
+  {q:"5. Phillips' fifth level adds which measure?",
+   opts:["Reaction","Engagement","Return on Investment (ROI)","Attendance"], a:2}
+];
+const qWrap=document.getElementById('quiz-questions');
+quiz.forEach((item,i)=>{
+  const d=document.createElement('div'); d.className='q';
+  let html=`<p>${item.q}</p>`;
+  item.opts.forEach((o,j)=>{
+    html+=`<label><input type="radio" name="q${i}" value="${j}">${o}</label>`;
+  });
+  d.innerHTML=html; qWrap.appendChild(d);
+});
+function gradeQuiz(){
+  let score=0,answered=0;
+  quiz.forEach((item,i)=>{
+    const sel=document.querySelector(`input[name="q${i}"]:checked`);
+    if(sel){answered++; if(+sel.value===item.a) score++;}
+  });
+  const r=document.getElementById('quizResult');
+  if(answered<quiz.length){r.textContent='Please answer all questions first.';r.className='wrong';return;}
+  r.textContent=`You scored ${score} / ${quiz.length}. ` + (score===quiz.length?'Excellent — you\'ve got it!':'Review the highlighted sections above and try again.');
+  r.className = score===quiz.length?'correct':'wrong';
+}
+</script>
+</body>
+</html>
